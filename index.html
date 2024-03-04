@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Stop Watch</title>
+</head>
+<body>
+    
+    <div class="container">
+        <div id="timer">00:00:00:00</div>
+        <div class="button">
+            <button id="play-pause" class="button"><i class="fa-solid fa-play"></i></button>
+            <button id="reset" class="button"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+            <button id="time-stamp" class="button"><i class="fa fa-clock-o" aria-hidden="true"></i></button>
+        </div>
+
+        <ul class="time-stamp-list">
+
+        </ul>
+    </div>
+
+
+    <!-- <script src="script.js"></script> -->
+    <script>
+        const playPauseBtn = document.querySelector('#play-pause')
+        const resetBtn = document.querySelector('#reset')
+        const timeStamp = document.querySelector('#time-stamp')
+        const timeStampList = document.querySelector('.time-stamp-list')
+        const deleteTime = timeStampList.querySelectorAll('li');
+
+
+//variable for timer
+let milisecond = 0;
+let second = 0;
+let minute = 0;
+let hour = 0;
+
+
+//variables to put zero when the number is in unit
+
+let milisecondZero = 0;
+let secondZero = 0;
+let minuteZero = 0;
+let hourZero = 0;
+
+
+//variables for controlling the fuctionality of stopwatch
+
+let intervalStatus;
+let intervalSwitch = "stopped";
+
+function stopWatch() {
+
+    milisecond++
+
+   if (milisecond / 100 === 1) { 
+    milisecond = 0;
+    second++
+    if(second / 60 === 1){
+        second = 0;
+        minute++;
+        if(minute / 60 === 1){
+            minute = 0;
+            hour++
+        }
+    }
+}
+
+    if(milisecond < 10) {
+        milisecondZero = "0" + milisecond.toString();
+    }else {
+        milisecondZero = milisecond;
+    }
+    if(second < 10) {
+        secondZero = "0" + second.toString();
+    }else {
+        secondZero = second;
+    }
+    if(minute < 10) {
+        minuteZero = "0" + minute.toString();
+    }else {
+        minuteZero = minute;
+    }
+    if(hour < 10) {
+        hourZero = "0" + hour.toString();
+    }else {
+        hourZero = hour;
+    }
+
+    let displayTimer = document.getElementById('timer').innerText = hourZero + ":" + minuteZero + ":" + secondZero + ":" + milisecondZero;
+}
+
+// window.setInterval(stopWatch, 1000);
+
+playPauseBtn.addEventListener('click', function(){
+    if(intervalSwitch === "stopped"){
+        intervalStatus = window.setInterval(stopWatch, 10);
+        playPauseBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+        intervalSwitch = "Started";
+    }else{
+        window.clearInterval(intervalStatus);
+        playPauseBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
+        intervalSwitch = "stopped";
+    }
+})
+
+resetBtn.addEventListener('click', function() {
+
+    window.clearInterval(intervalStatus);
+    second = 0;
+    minute = 0;
+    hour = 0;
+    document.getElementById('timer').innerText = "00:00:00:00";
+    playPauseBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
+    intervalSwitch = "stopped";
+})
+
+timeStamp.addEventListener('click', function(e){
+
+    if(document.getElementById('timer').innerText === "00:00:00:00") {
+        alert("Please start the timer first");
+    }else{
+    let li = document.createElement('li');
+    li.innerHTML = document.getElementById('timer').textContent;
+    timeStampList.appendChild(li);
+    }
+})
+
+
+
+
+    </script>
+</body>
+</html>
